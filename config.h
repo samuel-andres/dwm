@@ -28,6 +28,11 @@
 /* -- Appearance -- */
 static unsigned int borderpx                = 3;   /* border pixel of windows */
 static unsigned int snap                    = 32;  /* snap pixel */
+static unsigned int gappih                  = 20;  /* horiz inner gap between windows */
+static unsigned int gappiv                  = 10;  /* vert inner gap between windows */
+static unsigned int gappoh                  = 10;  /* horiz outer gap between windows and screen edge */
+static unsigned int gappov                  = 30;  /* vert outer gap between windows and screen edge */
+static int smartgaps                        = 0;   /* 1 means no outer gap when there is only one window */
 static int showbar                          = 1;   /* 0 means no bar */
 static int topbar                           = 1;   /* 0 means bottom bar */
 static const unsigned int systraypinning    = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
@@ -61,16 +66,30 @@ static const Rule rules[] = {
 };
 
 /* -- Layout(s) -- */
-static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] */
-static const int nmaster     = 1;    /* number of clients in master area */
-static const int resizehints = 0;    /* 1 means respect size hints in tiled resizals */
-static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen window */
+#define FORCE_VSPLIT 1                                          /* nrowgrid layout: force two clients to always split vertically    */
+#include "vanitygaps.c"
+static const float mfact            = 0.55;                     /* factor of master area size [0.05..0.95] */
+static const int nmaster            = 1;                        /* number of clients in master area */
+static const int resizehints        = 0;                        /* 1 means respect size hints in tiled resizals */
+static const int lockfullscreen     = 1;                        /* 1 will force focus on the fullscreen window */
 
 static const Layout layouts[] = {
-	/* symbol     arrange function */
-	{ "[]=",      tile },    /* first entry is default */
-	{ "><>",      NULL },    /* no layout function means floating behavior */
-	{ "[M]",      monocle },
+	/* symbol                   arrange function */
+	{ "[]=",                    tile                    },  /* first entry is default */
+	{ "[M]",                    monocle                 },  /* All windows on top of eachother                                  */
+	{ "[@]",                    spiral                  },  /* Fibonacci spiral                                                 */
+	{ "[\\]",                   dwindle                 },  /* Decreasing in size right and leftward                            */
+	{ "H[]",                    deck                    },  /* Master on left, slaves in monocle-like mode on right             */
+	{ "TTT",                    bstack                  },  /* Master on top, slaves on bottom                                  */
+	{ "===",                    bstackhoriz             },
+	{ "HHH",                    grid                    },
+	{ "###",                    nrowgrid                },
+	{ "---",                    horizgrid               },
+	{ ":::",                    gaplessgrid             },
+	{ "|M|",                    centeredmaster          },  /* Master in middle, slaves on sides                                */
+	{ ">M>",                    centeredfloatingmaster  },  /* Same but master floats                                           */
+	{ "><>",                    NULL                    },  /* no layout function means floating behavior */
+	{ NULL,                     NULL                    },
 };
 
 /* key definitions */
@@ -167,9 +186,15 @@ static const Key keys[] = {
     { MODKEY|ShiftMask,             XK_BackSpace,   killclient,         {0           } },
 
     /* Change the current layout */
-    { MODKEY,                       XK_t,           setlayout,          {.v = &layouts[0]} }, /* tile */
-    { MODKEY|ShiftMask,             XK_f,           setlayout,          {.v = &layouts[1]} }, /* floating */
-    { MODKEY|ShiftMask,             XK_u,           setlayout,          {.v = &layouts[2]} }, /* monocle */
+    { MODKEY,                       XK_t,           setlayout,          {.v = &layouts[0]}  }, /* tile */
+    { MODKEY|ShiftMask,             XK_u,           setlayout,          {.v = &layouts[1]}  }, /* monocle */
+    { MODKEY,                       XK_y,           setlayout,          {.v = &layouts[2]}  }, /* spiral */
+    { MODKEY|ShiftMask,             XK_y,           setlayout,          {.v = &layouts[3]}  }, /* dwindle */
+    { MODKEY,                       XK_u,           setlayout,          {.v = &layouts[4]}  }, /* deck */
+    { MODKEY|ShiftMask,             XK_t,           setlayout,          {.v = &layouts[5]}  }, /* bstack */
+    { MODKEY,                       XK_i,           setlayout,          {.v = &layouts[11]} }, /* centeredmaster */
+    { MODKEY|ShiftMask,             XK_i,           setlayout,          {.v = &layouts[12]} }, /* centeredfloatingmaster */
+    { MODKEY|ShiftMask,             XK_f,           setlayout,          {.v = &layouts[13]} }, /* floating */
 
     /* Make the focused window visible across all the tags (aka STICKY) */
     { MODKEY,                       XK_s,           togglesticky,       {0} },
@@ -180,6 +205,13 @@ static const Key keys[] = {
     /* Increase/decrease master's size */
     { MODKEY,                       XK_h,           setmfact,           {.f = -0.05} },
     { MODKEY,                       XK_l,           setmfact,           {.f = +0.05} },
+
+    /* Manage gaps */
+    { MODKEY,                       XK_a,           togglegaps,         {0         } }, /* Enable/disable gaps */
+    { MODKEY|ShiftMask,             XK_a,           defaultgaps,        {0         } }, /* Restore default size */
+    { MODKEY,                       XK_z,           incrgaps,           {.i = +3   } }, /* Increase size */
+    { MODKEY,                       XK_x,           incrgaps,           {.i = -3   } }, /* Decrease size */
+    { MODKEY|ShiftMask,             XK_x,           togglesmartgaps,    {0         } }, /* Enable/disable smart gaps */
 
     /* Show/hide status bar */
     { MODKEY,                       XK_b,           togglebar,          {0         } },
