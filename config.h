@@ -171,6 +171,9 @@ static const Key keys[] = {
     { MODKEY|ShiftMask,             XK_f,           setlayout,          {.v = &layouts[1]} }, /* floating */
     { MODKEY|ShiftMask,             XK_u,           setlayout,          {.v = &layouts[2]} }, /* monocle */
 
+    /* Make the focused window visible across all the tags (aka STICKY) */
+    { MODKEY,                       XK_s,           togglesticky,       {0} },
+
     /* Increase/decrease master's size */
     { MODKEY,                       XK_h,           setmfact,           {.f = -0.05} },
     { MODKEY,                       XK_l,           setmfact,           {.f = +0.05} },
