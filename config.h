@@ -174,6 +174,9 @@ static const Key keys[] = {
     /* Make the focused window visible across all the tags (aka STICKY) */
     { MODKEY,                       XK_s,           togglesticky,       {0} },
 
+    /* Make the focused window show in fullscreen */
+    { MODKEY,                       XK_f,           togglefullscr,      {0} },
+
     /* Increase/decrease master's size */
     { MODKEY,                       XK_h,           setmfact,           {.f = -0.05} },
     { MODKEY,                       XK_l,           setmfact,           {.f = +0.05} },
