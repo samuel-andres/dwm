@@ -90,13 +90,17 @@ static const char *termcmd[]  = { "st", NULL };
 
 /* -- Bindings -- */
 #include <X11/XF86keysym.h> /* Provides XF86XK_* keys (multimedia keys)  */
+#include "movestack.c" /* Includes the movestack patch */
 static const Key keys[] = {
     /* modifier                     key             function            argument */
 
     /* Move the focus to the next/previous/master window in the stack*/
     { MODKEY,                       XK_j,           focusstack,         {.i = +1 } },
     { MODKEY,                       XK_k,           focusstack,         {.i = -1 } },
-    { MODKEY,                       XK_v,           focusstack,         {.i = 0  } },
+
+    /* Move the focused window to the next/previous stack position */
+    { MODKEY|ShiftMask,             XK_j,           movestack,          {.i = +1 } },
+    { MODKEY|ShiftMask,             XK_k,           movestack,          {.i = -1 } },
 
     /* Show only the windows with the selected tag */
     { MODKEY,                       XK_1,           view,               {.ui = 1 << 0} },
