@@ -90,7 +90,8 @@ static const char *termcmd[]  = { "st", NULL };
 
 /* -- Bindings -- */
 #include <X11/XF86keysym.h> /* Provides XF86XK_* keys (multimedia keys)  */
-#include "movestack.c" /* Includes the movestack patch */
+#include "movestack.c" /* Provides movestack function (patch) */
+#include "shiftview.c" /* Provides shiftview function (patch) */
 static const Key keys[] = {
     /* modifier                     key             function            argument */
 
@@ -148,6 +149,10 @@ static const Key keys[] = {
     { MODKEY|ControlMask|ShiftMask, XK_7,           toggletag,          {.ui = 1 << 6} },
     { MODKEY|ControlMask|ShiftMask, XK_8,           toggletag,          {.ui = 1 << 7} },
     { MODKEY|ControlMask|ShiftMask, XK_9,           toggletag,          {.ui = 1 << 8} },
+
+    /* Show only the windows with the previous/next tag */
+    { MODKEY|ShiftMask,             XK_h,           shiftview,          { .i = -1 } },
+    { MODKEY|ShiftMask,             XK_l,           shiftview,          { .i = 1  } },
 
     /* Move the focused window to the top of the stack (MASTER) */
     { MODKEY,                       XK_Return,      zoom,               {0           } },
