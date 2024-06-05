@@ -53,16 +53,32 @@ static const char *colors[][3]      = {
 	[SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
 };
 
+/* -- Scratchpads -- */
+typedef struct {
+    const char *name;
+    const void *cmd;
+} Sp;
+const char *spcmd1[] = {TERMINAL, "-n",     SPTERM,  "-g", "120x34", NULL };
+const char *spcmd2[] = {TERMINAL, "-n",     SPCALC,  "-f", TERM_FONT, "-g", "50x20", "-e", CALCULATOR, "-lq", NULL };
+const char *spcmd3[] = {TERMINAL, "-n",     SPMUSIC, "-g", "120x34" "-e", MUSIC, NULL};
+static Sp scratchpads[] = {
+    /* name          cmd  */
+    { SPTERM,      spcmd1},
+    { SPCALC,      spcmd2},
+    { SPMUSIC,     spcmd3},
+};
+
 /* -- Tagging -- */
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 
 static const Rule rules[] = {
-	/* xprop(1):
-	 *	WM_CLASS(STRING) = instance, class
-	 *	WM_NAME(STRING) = title
-	 */
-	/* class      instance    title       tags mask     isfloating   monitor */
-	{ TERMCLASS,  NULL,       NULL,       0,            0,           -1 }, /* every terminal  */
+    /* class      instance    title       tags mask     isfloating   monitor */
+    { TERMCLASS,  NULL,       NULL,       0,            0,           -1 }, /* every terminal  */
+    /* scratchpads rules */
+    { TERMCLASS,  SPTERM,     NULL,       SPTAG(0),     1,           -1 }, /* st scratchpad   */
+    { TERMCLASS,  SPCALC,     NULL,       SPTAG(1),     1,           -1 }, /* bc scratchpad   */
+    { TERMCLASS,  SPMUSIC,    NULL,       SPTAG(2),     1,           -1 }, /* ncspot scratchpad */
+    { FMCLASS,    NULL,       NULL,       0,            1,           -1 }, /* tui file manager  */
 };
 
 /* -- Layout(s) -- */
@@ -224,6 +240,11 @@ static const Key keys[] = {
 
     /* Move a window in/out of the stack (float) */
     { MODKEY|ShiftMask,             XK_space,       togglefloating,     {0         } },
+
+    /* Toggle scratchpads */
+    { MODKEY|ShiftMask,             XK_apostrophe,  togglescratch,      {.ui = 1   } }, /* bc */
+    { MODKEY|ShiftMask,             XK_exclamdown,  togglescratch,      {.ui = 2   } }, /* spotify */
+    { MODKEY|ShiftMask,             XK_dead_grave,  togglescratch,      {.ui = 0   } }, /* st */
 
     /* Launch commands */
     { MODKEY|ShiftMask,             XK_Return,                spawn,              {.v = termcmd} },
