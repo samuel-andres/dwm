@@ -6,7 +6,6 @@
 #define BROWSER 	    "qutebrowser"
 #define BACKGROUND 	    "bg"
 #define MUSIC 		    "ncspot"
-#define EMOJI_PICKER        "emojipick"
 #define CALCULATOR 	    "bc"
 #define LAUNCHER            "dmenu_run"
 #define LOCKER              "slock"
@@ -23,7 +22,6 @@
 /* fonts */
 #define FONT                "monospace:pixelsize=12"
 #define TERM_FONT           "monospace:pixelsize=12"
-#define ICON_FONT           "Twemoji:pixelsize=12:antialias=true:autohint=true"
 
 /* -- Appearance -- */
 static unsigned int borderpx                = 3;   /* border pixel of windows */
@@ -40,7 +38,7 @@ static const unsigned int systrayonleft     = 0;   /* 0: systray in the right co
 static const unsigned int systrayspacing    = 2;   /* systray spacing */
 static const int systraypinningfailfirst    = 1;   /* 1: if pinning fails, display systray on the first monitor, False: display systray on the last monitor*/
 static const int showsystray                = 1;   /* 0 means no systray */
-static const char *fonts[]                        = { FONT, ICON_FONT };
+static const char *fonts[]                        = { FONT };
 static const char dmenufont[]               = FONT;
 static const char col_gray1[]       = "#282828";
 static const char col_gray2[]       = "#504945";
@@ -244,7 +242,6 @@ static const Key keys[] = {
     /* Launch commands */
     { MODKEY|ShiftMask,             XK_Return,                spawn,              {.v = termcmd} },
     { MODKEY,                       XK_w,                     spawn,              {.v = (const char*[]){ BROWSER, NULL } } },
-    { MODKEY,                       XK_e,                     spawn,              {.v = (const char*[]){ EMOJI_PICKER, NULL } } },
     { MODKEY,                       XK_p,                     spawn,              {.v = (const char*[]){ LAUNCHER, NULL } } },
     { MODKEY|ShiftMask,             XK_comma,                 spawn,              {.v = (const char*[]){ LOCKER, NULL } } },
     { MODKEY|Mod1Mask,              XK_s,                     spawn,              SHCMD("scrot -s ~/Pictures/Screenshots/%b%d::%H%M%S.png")},
