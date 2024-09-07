@@ -16,7 +16,6 @@
 #define XEVTITLE 	    "Event Tester"
 /* X window classes */
 #define TERMCLASS           "St"
-#define FMCLASS             "Ranger"
 /* key aliases */
 #define MODKEY              Mod4Mask /* SUPER */
 /* fonts */
@@ -76,7 +75,6 @@ static const Rule rules[] = {
     { TERMCLASS,  SPTERM,     NULL,       SPTAG(0),     1,           -1 }, /* st scratchpad   */
     { TERMCLASS,  SPCALC,     NULL,       SPTAG(1),     1,           -1 }, /* bc scratchpad   */
     { TERMCLASS,  SPMUSIC,    NULL,       SPTAG(2),     1,           -1 }, /* ncspot scratchpad */
-    { FMCLASS,    NULL,       NULL,       0,            1,           -1 }, /* tui file manager  */
 };
 
 /* -- Layout(s) -- */
