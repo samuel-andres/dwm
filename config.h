@@ -79,7 +79,6 @@ static const Rule rules[] = {
 
 /* -- Layout(s) -- */
 #define FORCE_VSPLIT 1                                          /* nrowgrid layout: force two clients to always split vertically    */
-#include "vanitygaps.c"
 static const float mfact            = 0.55;                     /* factor of master area size [0.05..0.95] */
 static const int nmaster            = 1;                        /* number of clients in master area */
 static const int resizehints        = 0;                        /* 1 means respect size hints in tiled resizals */
@@ -89,17 +88,6 @@ static const Layout layouts[] = {
 	/* symbol                   arrange function */
 	{ "[]=",                    tile                    },  /* first entry is default */
 	{ "[M]",                    monocle                 },  /* All windows on top of eachother                                  */
-	{ "[@]",                    spiral                  },  /* Fibonacci spiral                                                 */
-	{ "[\\]",                   dwindle                 },  /* Decreasing in size right and leftward                            */
-	{ "H[]",                    deck                    },  /* Master on left, slaves in monocle-like mode on right             */
-	{ "TTT",                    bstack                  },  /* Master on top, slaves on bottom                                  */
-	{ "===",                    bstackhoriz             },
-	{ "HHH",                    grid                    },
-	{ "###",                    nrowgrid                },
-	{ "---",                    horizgrid               },
-	{ ":::",                    gaplessgrid             },
-	{ "|M|",                    centeredmaster          },  /* Master in middle, slaves on sides                                */
-	{ ">M>",                    centeredfloatingmaster  },  /* Same but master floats                                           */
 	{ "><>",                    NULL                    },  /* no layout function means floating behavior */
 	{ NULL,                     NULL                    },
 };
@@ -195,13 +183,7 @@ static const Key keys[] = {
     /* Change the current layout */
     { MODKEY,                       XK_t,           setlayout,          {.v = &layouts[0]}  }, /* tile */
     { MODKEY|ShiftMask,             XK_u,           setlayout,          {.v = &layouts[1]}  }, /* monocle */
-    { MODKEY,                       XK_y,           setlayout,          {.v = &layouts[2]}  }, /* spiral */
-    { MODKEY|ShiftMask,             XK_y,           setlayout,          {.v = &layouts[3]}  }, /* dwindle */
-    { MODKEY,                       XK_u,           setlayout,          {.v = &layouts[4]}  }, /* deck */
-    { MODKEY|ShiftMask,             XK_t,           setlayout,          {.v = &layouts[5]}  }, /* bstack */
-    { MODKEY,                       XK_i,           setlayout,          {.v = &layouts[11]} }, /* centeredmaster */
-    { MODKEY|ShiftMask,             XK_i,           setlayout,          {.v = &layouts[12]} }, /* centeredfloatingmaster */
-    { MODKEY|ShiftMask,             XK_f,           setlayout,          {.v = &layouts[13]} }, /* floating */
+    { MODKEY|ShiftMask,             XK_f,           setlayout,          {.v = &layouts[2]} }, /* floating */
 
     /* Make the focused window visible across all the tags (aka STICKY) */
     { MODKEY,                       XK_s,           togglesticky,       {0} },
@@ -218,7 +200,6 @@ static const Key keys[] = {
     { MODKEY|ShiftMask,             XK_a,           defaultgaps,        {0         } }, /* Restore default size */
     { MODKEY,                       XK_z,           incrgaps,           {.i = +3   } }, /* Increase size */
     { MODKEY,                       XK_x,           incrgaps,           {.i = -3   } }, /* Decrease size */
-    { MODKEY|ShiftMask,             XK_x,           togglesmartgaps,    {0         } }, /* Enable/disable smart gaps */
 
     /* Show/hide status bar */
     { MODKEY,                       XK_b,           togglebar,          {0         } },
